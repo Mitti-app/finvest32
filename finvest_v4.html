@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Finvest — Student Finance India</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a0f;--bg2:#12121a;--bg3:#1a1a26;--bg4:#222232;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);--text:#f0f0f8;--text2:#9090b0;--text3:#5a5a78;--green:#00e676;--green-bg:rgba(0,230,118,0.1);--green-dim:rgba(0,230,118,0.06);--red:#ff5252;--red-bg:rgba(255,82,82,0.1);--amber:#ffb300;--amber-bg:rgba(255,179,0,0.1);--blue:#448aff;--blue-bg:rgba(68,138,255,0.1);--purple:#ce93d8;--purple-bg:rgba(206,147,216,0.1);--r:12px;--r-sm:8px;--r-lg:18px}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.6;overflow-x:hidden}
+h1,h2,h3,h4{font-family:'Syne',sans-serif;line-height:1.2}
+.layer{display:none;position:fixed;inset:0;z-index:10;overflow-y:auto;background:var(--bg)}
+.layer.active{display:flex;flex-direction:column}
+.app-wrap{max-width:430px;margin:0 auto;width:100%;flex:1;display:flex;flex-direction:column}
+.auth-page{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;text-align:center;animation:fadeUp .35s ease}
+.logo{font-family:'Syne',sans-serif;font-size:46px;font-weight:800;color:var(--green);letter-spacing:-.03em;margin-bottom:6px}
+.logo-sub{font-size:14px;color:var(--text2);margin-bottom:36px}
+.auth-card{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r-lg);padding:26px 22px;width:100%;max-width:360px;text-align:left}
+.auth-title{font-family:'Syne',sans-serif;font-size:19px;font-weight:700;margin-bottom:4px}
+.auth-sub{font-size:13px;color:var(--text2);margin-bottom:20px}
+.field{margin-bottom:14px}
+.field label{font-size:11px;color:var(--text2);display:block;margin-bottom:5px;font-weight:500;letter-spacing:.04em;text-transform:uppercase}
+.field input,.field select{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r-sm);padding:11px 13px;font-size:14px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s}
+.field input:focus,.field select:focus{border-color:var(--green)}
+.field input::placeholder{color:var(--text3)}
+.field-row{display:flex;gap:10px}
+.btn{display:block;width:100%;padding:13px;border-radius:var(--r);border:none;font-family:'Syne',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .18s;text-align:center}
+.btn-primary{background:var(--green);color:#000}
+.btn-primary:hover{opacity:.88;transform:translateY(-1px)}
+.btn-outline{background:transparent;color:var(--green);border:1px solid rgba(0,230,118,.35)}
+.btn-outline:hover{background:var(--green-dim)}
+.btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border2)}
+.btn-ghost:hover{background:var(--bg3)}
+.btn-danger{background:var(--red-bg);color:var(--red);border:1px solid rgba(255,82,82,.25)}
+.btn-sm{padding:7px 14px;font-size:12px;width:auto;display:inline-block;border-radius:var(--r-sm)}
+.auth-switch{font-size:13px;color:var(--text2);text-align:center;margin-top:14px}
+.auth-switch span{color:var(--green);cursor:pointer;font-weight:500}
+.divider-line{display:flex;align-items:center;gap:10px;margin:14px 0}
+.divider-line::before,.divider-line::after{content:'';flex:1;height:1px;background:var(--border)}
+.divider-line span{font-size:12px;color:var(--text3)}
+.otp-grid{display:flex;gap:8px;justify-content:center;margin:14px 0}
+.otp-input{width:46px;height:50px;text-align:center;font-family:'Syne',sans-serif;font-size:20px;font-weight:700;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r-sm);color:var(--text);outline:none;transition:border-color .2s}
+.otp-input:focus{border-color:var(--green)}
+.err-msg{background:var(--red-bg);border:1px solid rgba(255,82,82,.2);border-radius:var(--r-sm);padding:9px 12px;font-size:13px;color:var(--red);margin-bottom:12px;display:none}
+.err-msg.show{display:block}
+.success-msg{background:var(--green-bg);border:1px solid rgba(0,230,118,.2);border-radius:var(--r-sm);padding:9px 12px;font-size:13px;color:var(--green);margin-bottom:12px;display:none}
+.success-msg.show{display:block}
+.feat-list{display:flex;flex-direction:column;gap:10px;width:100%;max-width:360px;margin-bottom:28px;text-align:left}
+.feat-row{display:flex;align-items:center;gap:12px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:11px 13px}
+.feat-icon{font-size:20px;flex-shrink:0}
+.feat-title{font-size:13px;font-weight:500;color:var(--text);margin-bottom:1px}
+.feat-body{font-size:12px;color:var(--text2)}
+.screen{display:none;flex-direction:column;flex:1;padding-bottom:80px;animation:fadeUp .3s ease}
+.screen.active{display:flex}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.topbar{padding:18px 18px 0;display:flex;justify-content:space-between;align-items:center}
+.topbar-title{font-family:'Syne',sans-serif;font-size:21px;font-weight:700}
+.topbar-sub{font-size:12px;color:var(--text2)}
+.avatar{width:36px;height:36px;border-radius:50%;background:var(--green-bg);border:1px solid var(--green);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--green);cursor:pointer}
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--bg2);border-top:1px solid var(--border);display:flex;z-index:100;padding:8px 0 10px}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:3px 0}
+.nav-icon{font-size:18px}
+.nav-label{font-size:9px;color:var(--text3);font-weight:500;letter-spacing:.03em;transition:color .2s}
+.nav-item.active .nav-label{color:var(--green)}
+.nav-dot{width:4px;height:4px;border-radius:50%}
+.nav-item.active .nav-dot{background:var(--green)}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-lg);padding:16px;margin:0 14px 12px}
+.card-sm{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:13px}
+.sec-title{font-family:'Syne',sans-serif;font-size:11px;font-weight:600;color:var(--text2);letter-spacing:.08em;text-transform:uppercase;padding:12px 18px 7px}
+.badge{display:inline-block;font-size:10px;font-weight:500;padding:2px 9px;border-radius:20px}
+.bg{background:var(--green-bg);color:var(--green);border:1px solid rgba(0,230,118,.2)}
+.br{background:var(--red-bg);color:var(--red)}
+.ba{background:var(--amber-bg);color:var(--amber);border:1px solid rgba(255,179,0,.2)}
+.bb{background:var(--blue-bg);color:var(--blue)}
+.bsim{background:rgba(255,179,0,.12);color:var(--amber);font-size:9px;padding:1px 7px;border:1px solid rgba(255,179,0,.2)}
+.hero-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-lg);margin:14px;padding:20px;position:relative;overflow:hidden}
+.hero-card::before{content:'';position:absolute;top:-40px;right:-40px;width:130px;height:130px;border-radius:50%;background:var(--green-dim);pointer-events:none}
+.hero-amount{font-family:'Syne',sans-serif;font-size:36px;font-weight:800;letter-spacing:-.02em}
+.hero-label{font-size:12px;color:var(--text2);margin-bottom:4px}
+.prog-wrap{background:var(--bg4);border-radius:4px;height:5px;width:100%;overflow:hidden}
+.prog-fill{height:100%;border-radius:4px;transition:width .5s ease}
+.row-item{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid var(--border)}
+.row-item:last-child{border-bottom:none}
+.row-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.row-body{flex:1;min-width:0}
+.row-title{font-size:13px;font-weight:500;color:var(--text)}
+.row-sub{font-size:11px;color:var(--text2)}
+.chip-row{display:flex;gap:7px;overflow-x:auto;padding:0 14px 4px;scrollbar-width:none}
+.chip-row::-webkit-scrollbar{display:none}
+.chip{background:var(--bg3);border:1px solid var(--border2);border-radius:20px;padding:6px 13px;font-size:11px;font-weight:500;white-space:nowrap;cursor:pointer;transition:all .15s;color:var(--text2)}
+.chip.active{background:var(--green-bg);border-color:rgba(0,230,118,.35);color:var(--green)}
+.ticker-wrap{overflow:hidden;background:var(--bg3);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:7px 0;margin:12px 0 0}
+.ticker-inner{display:flex;gap:28px;white-space:nowrap;animation:ticker 22s linear infinite}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.ticker-item{font-size:11px;color:var(--text2);display:flex;align-items:center;gap:5px}
+.ticker-item span{font-family:'Syne',sans-serif;font-size:11px;font-weight:600}
+.income-type{display:flex;align-items:center;justify-content:space-between;padding:10px 13px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r-sm);margin-bottom:7px;cursor:pointer;transition:border-color .15s}
+.income-type.selected{border-color:rgba(0,230,118,.4);background:var(--green-dim)}
+.income-type-amt{font-family:'Syne',sans-serif;font-size:13px;font-weight:600;color:var(--green)}
+.squad-member{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid var(--border)}
+.squad-member:last-child{border-bottom:none}
+.squad-av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;flex-shrink:0}
+.learn-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-lg);margin:0 14px 12px;overflow:hidden;cursor:pointer;transition:border-color .2s}
+.learn-card:hover{border-color:var(--border2)}
+.learn-card-top{padding:16px 16px 12px}
+.learn-card-bot{background:var(--bg3);border-top:1px solid var(--border);padding:11px 16px;display:flex;align-items:center;justify-content:space-between}
+.chat-bub{background:var(--bg3);border:1px solid var(--border2);border-radius:14px 14px 14px 4px;padding:11px 14px;margin:0 14px 9px;max-width:88%}
+.chat-bub.user{border-radius:14px 14px 4px 14px;background:var(--green-bg);border-color:rgba(0,230,118,.2);margin-left:auto}
+.chat-bub p{font-size:13px;line-height:1.6;color:var(--text)}
+.chat-bub.user p{color:var(--green)}
+.coach-lbl{font-size:10px;color:var(--text3);padding:0 18px;margin-bottom:3px;font-weight:500}
+.toast{position:fixed;bottom:85px;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--green);color:var(--green);padding:9px 18px;border-radius:20px;font-size:12px;font-weight:500;z-index:999;opacity:0;pointer-events:none;transition:opacity .3s;white-space:nowrap}
+.toast.show{opacity:1}
+.lesson-step{display:none}
+.lesson-step.active{display:block;animation:fadeUp .25s ease}
+.lesson-prog{display:flex;gap:3px;margin-bottom:14px}
+.lesson-dot{flex:1;height:3px;border-radius:2px;background:var(--bg4)}
+.lesson-dot.done{background:var(--green)}
+.sem-ring-wrap{display:flex;justify-content:center;margin:8px 0 14px}
+.sem-ring{position:relative;width:130px;height:130px}
+.sem-ring svg{transform:rotate(-90deg)}
+.sem-ring-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.sem-days{font-family:'Syne',sans-serif;font-size:30px;font-weight:800}
+.sem-days-lbl{font-size:10px;color:var(--text2)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+.pulse{animation:pulse 2s infinite}
+input[type=range]{-webkit-appearance:none;width:100%;height:4px;border-radius:2px;background:var(--bg4);outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--green);cursor:pointer;border:2px solid var(--bg)}
+.scroll-area{flex:1;overflow-y:auto;scrollbar-width:none}
+.scroll-area::-webkit-scrollbar{display:none}
+/* ADMIN */
+.admin-wrap{max-width:700px;margin:0 auto;padding:24px 18px;width:100%}
+.admin-stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px}
+.admin-stat{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px}
+.admin-stat-val{font-family:'Syne',sans-serif;font-size:26px;font-weight:700;margin-bottom:2px}
+.admin-stat-lbl{font-size:11px;color:var(--text2)}
+.user-table{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;margin-bottom:20px}
+.tbl-head{display:grid;grid-template-columns:1.2fr 1fr 1fr 70px 70px;gap:8px;padding:11px 15px;border-bottom:1px solid var(--border);font-size:10px;color:var(--text3);font-weight:500;text-transform:uppercase;letter-spacing:.06em}
+.tbl-row{display:grid;grid-template-columns:1.2fr 1fr 1fr 70px 70px;gap:8px;padding:12px 15px;border-bottom:1px solid var(--border);align-items:center;transition:background .15s}
+.tbl-row:last-child{border-bottom:none}
+.tbl-row:hover{background:var(--bg3)}
+.u-name{font-size:12px;font-weight:500;color:var(--text)}
+.u-sub{font-size:11px;color:var(--text2);margin-top:1px}
+.u-status{font-size:10px;font-weight:500;padding:2px 7px;border-radius:20px;text-align:center;display:inline-block}
+.s-active{background:var(--green-bg);color:var(--green)}
+.s-new{background:var(--blue-bg);color:var(--blue)}
+.s-guest{background:var(--bg4);color:var(--text3)}
+.info-box{background:var(--amber-bg);border:1px solid rgba(255,179,0,.2);border-radius:var(--r);padding:13px;margin-bottom:18px;font-size:13px;color:var(--amber);line-height:1.6}
+
+.ob-dot{width:8px;height:8px;border-radius:50%;background:var(--bg4);transition:background .3s}
+.ob-dot.active{background:var(--green);width:20px;border-radius:4px}
+.ob-step{display:none;flex-direction:column;flex:1;animation:fadeUp .3s ease}
+.ob-step.active{display:flex}
+</style>
+</head>
+<body>
+
+<!-- LANDING -->
+<div class="layer active" id="layer-landing">
+<div class="app-wrap">
+<div class="auth-page">
+  <div class="logo">finvest</div>
+  <div class="logo-sub">India's first finance app built for students</div>
+  <div class="feat-list">
+    <div class="feat-row"><div class="feat-icon">🧪</div><div><div class="feat-title">Simulate first, invest later</div><div class="feat-body">Virtual ₹1,00,000 sandbox — zero real risk</div></div></div>
+    <div class="feat-row"><div class="feat-icon">🕐</div><div><div class="feat-title">Semester clock</div><div class="feat-body">Budget that knows your academic calendar</div></div></div>
+    <div class="feat-row"><div class="feat-icon">👥</div><div><div class="feat-title">Squad savings</div><div class="feat-body">Save for Goa trip with your hostel friends</div></div></div>
+    <div class="feat-row"><div class="feat-icon" style="width:32px;height:32px;border-radius:50%;background:#c8965a;display:flex;align-items:center;justify-content:center;font-family:Syne,sans-serif;font-size:13px;font-weight:700;color:#1a1408;flex-shrink:0">JJ</div><div><div class="feat-title">Jameel Jamali — Finance Guru</div><div class="feat-body">Baccha hai tu mera · Dhurandhar ka mastermind</div></div></div>
+  </div>
+  <div style="width:100%;max-width:360px;display:flex;flex-direction:column;gap:10px">
+    <button class="btn btn-primary" onclick="showLayer('layer-signup')">Create free account</button>
+    <button class="btn btn-ghost" onclick="showLayer('layer-login')">I already have an account</button>
+    <button class="btn btn-outline" onclick="guestMode()" style="font-size:12px;padding:10px">Explore without signing up →</button>
+  </div>
+  <div style="margin-top:16px;font-size:11px;color:var(--text3)">No KYC · No salary · Free forever</div>
+</div>
+</div>
+</div>
+
+<!-- SIGNUP -->
+<div class="layer" id="layer-signup">
+<div class="app-wrap">
+<div class="auth-page" style="justify-content:flex-start;padding-top:36px">
+  <div class="logo" style="font-size:30px;margin-bottom:3px">finvest</div>
+  <div style="margin-bottom:20px;font-size:12px;color:var(--text2)">Create your account</div>
+  <div class="auth-card">
+    <div class="auth-title">Join Finvest 🚀</div>
+    <div class="auth-sub">Takes 30 seconds. No salary required.</div>
+    <div id="signup-err" class="err-msg"></div>
+    <div class="field"><label>Full name</label><input type="text" id="su-name" placeholder="Arjun Kumar"></div>
+    <div class="field"><label>Email or phone</label><input type="text" id="su-email" placeholder="arjun@college.edu or 9876543210"></div>
+    <div class="field"><label>Password</label><input type="password" id="su-pass" placeholder="Min 6 characters"></div>
+    <div class="field"><label>College name</label><input type="text" id="su-college" placeholder="IIT Delhi, BITS Pilani..."></div>
+    <div class="field-row">
+      <div class="field" style="flex:1;margin-bottom:0"><label>Year</label><select id="su-year"><option>1st Year</option><option selected>2nd Year</option><option>3rd Year</option><option>4th Year</option><option>PG</option></select></div>
+      <div class="field" style="flex:1;margin-bottom:0"><label>Branch</label><input type="text" id="su-branch" placeholder="CSE, MBA..."></div>
+    </div>
+    <div style="height:14px"></div>
+    <button class="btn btn-primary" onclick="doSignup()">Create account →</button>
+    <div class="divider-line"><span>or</span></div>
+    <button class="btn btn-ghost" onclick="showLayer('layer-otp')" style="font-size:12px">Sign up with mobile OTP</button>
+  </div>
+  <div class="auth-switch">Have an account? <span onclick="showLayer('layer-login')">Log in</span></div>
+  <div style="margin-top:10px"><span onclick="showLayer('layer-landing')" style="font-size:11px;color:var(--text3);cursor:pointer">← Back</span></div>
+</div>
+</div>
+</div>
+
+<!-- LOGIN -->
+<div class="layer" id="layer-login">
+<div class="app-wrap">
+<div class="auth-page" style="justify-content:flex-start;padding-top:60px">
+  <div class="logo" style="font-size:30px;margin-bottom:3px">finvest</div>
+  <div style="margin-bottom:20px;font-size:12px;color:var(--text2)">Welcome back</div>
+  <div class="auth-card">
+    <div class="auth-title">Log in 👋</div>
+    <div class="auth-sub">Enter your credentials to continue</div>
+    <div id="login-err" class="err-msg">Invalid email/phone or password.</div>
+    <div class="field"><label>Email or phone</label><input type="text" id="li-email" placeholder="arjun@college.edu"></div>
+    <div class="field"><label>Password</label><input type="password" id="li-pass" placeholder="Your password"></div>
+    <button class="btn btn-primary" onclick="doLogin()" style="margin-top:4px">Log in →</button>
+    <div class="divider-line"><span>or</span></div>
+    <button class="btn btn-ghost" onclick="showLayer('layer-otp')" style="font-size:12px">Log in with OTP</button>
+    <div style="text-align:center;margin-top:12px;font-size:11px;color:var(--text3)">Founder? <span onclick="showLayer('layer-admin-login')" style="color:var(--amber);cursor:pointer;font-weight:500">Admin panel →</span></div>
+  </div>
+  <div class="auth-switch">New here? <span onclick="showLayer('layer-signup')">Create account</span></div>
+  <div style="margin-top:10px"><span onclick="showLayer('layer-landing')" style="font-size:11px;color:var(--text3);cursor:pointer">← Back</span></div>
+</div>
+</div>
+</div>
+
+<!-- OTP -->
+<div class="layer" id="layer-otp">
+<div class="app-wrap">
+<div class="auth-page" style="justify-content:flex-start;padding-top:60px">
+  <div class="logo" style="font-size:30px;margin-bottom:20px">finvest</div>
+  <div class="auth-card">
+    <div id="otp-step1">
+      <div class="auth-title">Mobile OTP 📱</div>
+      <div class="auth-sub">We'll send a 6-digit code to your number</div>
+      <div class="field"><label>Mobile number</label><input type="text" id="otp-phone" placeholder="+91 98765 43210" maxlength="13"></div>
+      <button class="btn btn-primary" onclick="sendOTP()">Send OTP →</button>
+    </div>
+    <div id="otp-step2" style="display:none">
+      <div class="auth-title">Enter OTP 🔐</div>
+      <div class="auth-sub" id="otp-sent-to">Code sent to your number</div>
+      <div class="success-msg show" style="display:block">Demo: use code <strong>123456</strong></div>
+      <div class="otp-grid">
+        <input class="otp-input" maxlength="1" oninput="otpMove(this,0)" id="o0">
+        <input class="otp-input" maxlength="1" oninput="otpMove(this,1)" id="o1">
+        <input class="otp-input" maxlength="1" oninput="otpMove(this,2)" id="o2">
+        <input class="otp-input" maxlength="1" oninput="otpMove(this,3)" id="o3">
+        <input class="otp-input" maxlength="1" oninput="otpMove(this,4)" id="o4">
+        <input class="otp-input" maxlength="1" oninput="otpMove(this,5)" id="o5">
+      </div>
+      <div id="otp-err" class="err-msg">Wrong OTP. Try 123456 for demo.</div>
+      <button class="btn btn-primary" onclick="verifyOTP()">Verify →</button>
+      <div style="text-align:center;margin-top:10px;font-size:11px;color:var(--text3);cursor:pointer" onclick="document.getElementById('otp-step1').style.display='block';document.getElementById('otp-step2').style.display='none'">← Change number</div>
+    </div>
+  </div>
+  <div style="margin-top:14px"><span onclick="showLayer('layer-login')" style="font-size:11px;color:var(--text3);cursor:pointer">← Back to login</span></div>
+</div>
+</div>
+</div>
+
+
+<!-- ONBOARDING -->
+<div class="layer" id="layer-onboarding">
+<div class="app-wrap">
+<div style="min-height:100vh;display:flex;flex-direction:column;padding:0;animation:fadeUp .35s ease">
+
+  <!-- Progress dots -->
+  <div style="display:flex;justify-content:center;gap:8px;padding:28px 0 0">
+    <div class="ob-dot active" id="ob-d0"></div>
+    <div class="ob-dot" id="ob-d1"></div>
+    <div class="ob-dot" id="ob-d2"></div>
+    <div class="ob-dot" id="ob-d3"></div>
+  </div>
+
+  <!-- Step 0: Welcome -->
+  <div class="ob-step active" id="ob-step0">
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;text-align:center">
+      <div style="font-size:64px;margin-bottom:20px">🎉</div>
+      <div style="font-family:'Syne',sans-serif;font-size:26px;font-weight:800;margin-bottom:12px">Welcome to Finvest!</div>
+      <div id="ob-welcome-name" style="font-size:15px;color:var(--text2);margin-bottom:32px;line-height:1.7">Let's set up your account in 3 quick steps so we can personalise everything for you.</div>
+      <div style="width:100%;max-width:340px;display:flex;flex-direction:column;gap:10px">
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px;display:flex;gap:12px;align-items:center;text-align:left">
+          <div style="font-size:22px">💰</div><div><div style="font-size:13px;font-weight:500">Set your income</div><div style="font-size:11px;color:var(--text2)">Pocket money, stipend, scholarship</div></div>
+        </div>
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px;display:flex;gap:12px;align-items:center;text-align:left">
+          <div style="font-size:22px">🕐</div><div><div style="font-size:13px;font-weight:500">Set semester dates</div><div style="font-size:11px;color:var(--text2)">So your budget clock works perfectly</div></div>
+        </div>
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px;display:flex;gap:12px;align-items:center;text-align:left">
+          <div style="font-size:22px">🧪</div><div><div style="font-size:13px;font-weight:500">Take the app tour</div><div style="font-size:11px;color:var(--text2)">Learn all 6 features in 60 seconds</div></div>
+        </div>
+      </div>
+    </div>
+    <div style="padding:0 24px 32px"><button class="btn btn-primary" onclick="obNext()">Let's go →</button></div>
+  </div>
+
+  <!-- Step 1: Income Setup -->
+  <div class="ob-step" id="ob-step1">
+    <div style="flex:1;padding:28px 22px;overflow-y:auto">
+      <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:6px">Your income 💰</div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:24px;line-height:1.6">Tell us how much you get each month. We'll build your budget around it. You can change this anytime.</div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <div style="font-size:12px;color:var(--text2)">Pocket money / parents</div>
+        <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--green)" id="ob-pm-val">₹5,000</div>
+      </div>
+      <input type="range" min="0" max="20000" step="500" value="5000" id="ob-pm" oninput="obUpdateIncome()" style="margin-bottom:18px">
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <div style="font-size:12px;color:var(--text2)">College stipend / part-time</div>
+        <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--blue)" id="ob-st-val">₹0</div>
+      </div>
+      <input type="range" min="0" max="10000" step="500" value="0" id="ob-st" oninput="obUpdateIncome()" style="margin-bottom:18px">
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <div style="font-size:12px;color:var(--text2)">Scholarship (monthly avg)</div>
+        <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--amber)" id="ob-sc-val">₹0</div>
+      </div>
+      <input type="range" min="0" max="10000" step="500" value="0" id="ob-sc" oninput="obUpdateIncome()" style="margin-bottom:18px">
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <div style="font-size:12px;color:var(--text2)">Freelance / other income</div>
+        <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--purple)" id="ob-fr-val">₹0</div>
+      </div>
+      <input type="range" min="0" max="15000" step="500" value="0" id="ob-fr" oninput="obUpdateIncome()" style="margin-bottom:24px">
+
+      <div style="background:var(--bg2);border:1px solid var(--green);border-radius:var(--r);padding:16px;text-align:center">
+        <div style="font-size:11px;color:var(--text2);margin-bottom:4px">Total monthly income</div>
+        <div style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--green)" id="ob-total-income">₹5,000</div>
+        <div style="font-size:11px;color:var(--text2);margin-top:4px" id="ob-income-insight">That's ₹167/day to work with 💪</div>
+      </div>
+    </div>
+    <div style="padding:0 22px 32px;display:flex;gap:10px">
+      <button class="btn btn-ghost" onclick="obPrev()" style="flex:0.4">← Back</button>
+      <button class="btn btn-primary" onclick="obSaveIncome()" style="flex:1">Save & continue →</button>
+    </div>
+  </div>
+
+  <!-- Step 2: Semester Setup -->
+  <div class="ob-step" id="ob-step2">
+    <div style="flex:1;padding:28px 22px;overflow-y:auto">
+      <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:6px">Semester dates 🕐</div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:24px;line-height:1.6">Your semester clock needs to know when your semester starts and ends. This powers your daily budget and alerts.</div>
+
+      <div class="field"><label>Semester start date</label><input type="date" id="ob-sem-start" style="background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r-sm);padding:11px 13px;font-size:14px;color:var(--text);width:100%;outline:none"></div>
+      <div class="field"><label>Semester end date</label><input type="date" id="ob-sem-end" style="background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r-sm);padding:11px 13px;font-size:14px;color:var(--text);width:100%;outline:none"></div>
+      <div class="field">
+        <label>Monthly food & hostel budget</label>
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text2);margin-bottom:6px"><span>Fixed expenses</span><span style="font-family:'Syne',sans-serif;font-weight:600;color:var(--text)" id="ob-food-val">₹3,000</span></div>
+        <input type="range" min="0" max="10000" step="500" value="3000" id="ob-food" oninput="document.getElementById('ob-food-val').textContent='₹'+parseInt(this.value).toLocaleString('en-IN')">
+      </div>
+      <div class="field">
+        <label>Monthly SIP / investing target</label>
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text2);margin-bottom:6px"><span>Investment goal</span><span style="font-family:'Syne',sans-serif;font-weight:600;color:var(--green)" id="ob-sip-val">₹500</span></div>
+        <input type="range" min="0" max="5000" step="100" value="500" id="ob-sip-target" oninput="document.getElementById('ob-sip-val').textContent='₹'+parseInt(this.value).toLocaleString('en-IN')">
+      </div>
+    </div>
+    <div style="padding:0 22px 32px;display:flex;gap:10px">
+      <button class="btn btn-ghost" onclick="obPrev()" style="flex:0.4">← Back</button>
+      <button class="btn btn-primary" onclick="obSaveSemester()" style="flex:1">Save & continue →</button>
+    </div>
+  </div>
+
+  <!-- Step 3: App Tour -->
+  <div class="ob-step" id="ob-step3">
+    <div style="flex:1;padding:28px 22px;overflow-y:auto">
+      <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:6px">Quick tour 🗺️</div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:20px">Here's what each tab does:</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px;display:flex;gap:14px;align-items:flex-start">
+          <div style="font-size:22px;flex-shrink:0">🏠</div>
+          <div><div style="font-size:13px;font-weight:600;margin-bottom:2px">Home</div><div style="font-size:12px;color:var(--text2);line-height:1.5">Your balance, live market ticker, expense feed auto-read from UPI SMS, semester clock summary.</div></div>
+        </div>
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px;display:flex;gap:14px;align-items:flex-start">
+          <div style="font-size:22px;flex-shrink:0">🧪</div>
+          <div><div style="font-size:13px;font-weight:600;margin-bottom:2px">Sandbox</div><div style="font-size:12px;color:var(--text2);line-height:1.5">Invest with virtual ₹1 lakh. Watch real Nifty & stock prices move your portfolio. Go real when you're confident.</div></div>
+        </div>
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px;display:flex;gap:14px;align-items:flex-start">
+          <div style="font-size:22px;flex-shrink:0">🕐</div>
+          <div><div style="font-size:13px;font-weight:600;margin-bottom:2px">Semester</div><div style="font-size:12px;color:var(--text2);line-height:1.5">Budget clock with days left, daily spend limit, alerts for Diwali, exams, placement season.</div></div>
+        </div>
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px;display:flex;gap:14px;align-items:flex-start">
+          <div style="font-size:22px;flex-shrink:0">👥</div>
+          <div><div style="font-size:13px;font-weight:600;margin-bottom:2px">Squad</div><div style="font-size:12px;color:var(--text2);line-height:1.5">Create group savings goals — Goa trip, laptop, anything. See who's behind and nudge them.</div></div>
+        </div>
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px;display:flex;gap:14px;align-items:flex-start">
+          <div style="font-size:22px;flex-shrink:0">📚</div>
+          <div><div style="font-size:13px;font-weight:600;margin-bottom:2px">Learn</div><div style="font-size:12px;color:var(--text2);line-height:1.5">2-min lessons on SIP, index funds, gold. Invest ₹100 the moment you finish the lesson.</div></div>
+        </div>
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px;display:flex;gap:14px;align-items:flex-start">
+          <div style="font-size:22px;flex-shrink:0">🤖</div>
+          <div><div style="font-size:13px;font-weight:600;margin-bottom:2px">Jameel Jamali Coach</div><div style="font-size:12px;color:var(--text2);line-height:1.5">"Baccha hai tu mera" — your Hinglish finance advisor. Ask anything about budget, SIP, taxes.</div></div>
+        </div>
+      </div>
+    </div>
+    <div style="padding:0 22px 32px;display:flex;gap:10px">
+      <button class="btn btn-ghost" onclick="obPrev()" style="flex:0.4">← Back</button>
+      <button class="btn btn-primary" onclick="obFinish()" style="flex:1">Start using Finvest 🚀</button>
+    </div>
+  </div>
+
+</div>
+</div>
+</div>
+
+<!-- ADMIN LOGIN -->
+<div class="layer" id="layer-admin-login">
+<div class="app-wrap">
+<div class="auth-page" style="justify-content:flex-start;padding-top:60px">
+  <div class="logo" style="font-size:30px;margin-bottom:3px">finvest</div>
+  <div style="margin-bottom:20px;font-size:11px;color:var(--amber)">🔒 Founder access only</div>
+  <div class="auth-card">
+    <div class="auth-title">Admin login</div>
+    <div class="auth-sub">For founders to view registered users</div>
+    <div id="admin-err" class="err-msg">Wrong credentials.</div>
+    <div class="field"><label>Admin email</label><input type="text" id="adm-email" placeholder="admin@finvest.in"></div>
+    <div class="field"><label>Admin password</label><input type="password" id="adm-pass" placeholder="Admin password"></div>
+    <button class="btn btn-primary" onclick="doAdminLogin()">Enter admin panel →</button>
+    <div style="text-align:center;margin-top:12px;font-size:11px;color:var(--text3)">Demo: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="92f3f6fffbfcd2f4fbfce4f7e1e6bcfbfc">[email&#160;protected]</a> / admin123</div>
+  </div>
+  <div style="margin-top:12px"><span onclick="showLayer('layer-login')" style="font-size:11px;color:var(--text3);cursor:pointer">← Back</span></div>
+</div>
+</div>
+</div>
+
+<!-- ADMIN DASHBOARD -->
+<div class="layer" id="layer-admin">
+<div style="background:var(--bg);min-height:100vh;overflow-y:auto">
+<div class="admin-wrap">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+    <div><div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:700">Finvest Admin 🛡️</div><div style="font-size:12px;color:var(--text2);margin-top:2px">Registered users dashboard</div></div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <span style="background:var(--amber-bg);color:var(--amber);border:1px solid rgba(255,179,0,.25);font-size:10px;font-weight:500;padding:3px 9px;border-radius:20px">Founder view</span>
+      <button class="btn btn-ghost btn-sm" onclick="showLayer('layer-login')">Logout</button>
+    </div>
+  </div>
+  <div class="info-box">ℹ️ This is a local demo — user data is stored in your browser's localStorage. In production, connect to Firebase / Supabase to see all users from all devices. Only accessible via admin login.</div>
+  <div class="admin-stat-grid" id="admin-stats"></div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+    <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:600">All registered users</div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-outline btn-sm" onclick="renderAdminDashboard()">Refresh</button>
+      <button class="btn btn-danger btn-sm" onclick="clearAllUsers()">Clear all</button>
+    </div>
+  </div>
+  <div class="user-table">
+    <div class="tbl-head"><div>Name & college</div><div>Contact</div><div>Branch & year</div><div>Joined</div><div>Status</div></div>
+    <div id="user-list"></div>
+  </div>
+  <div style="font-size:11px;color:var(--text3);text-align:center;margin-top:12px">To see all users from all devices → integrate Firebase Auth + Firestore (free tier handles 50k users/month)</div>
+</div>
+</div>
+</div>
+
+<!-- MAIN APP -->
+<div class="layer" id="layer-app">
+<div class="app-wrap">
+
+  <!-- HOME -->
+  <div class="screen active" id="screen-home">
+    <div class="topbar">
+      <div><div class="topbar-title" id="home-greeting">Namaste 👋</div><div class="topbar-sub" id="home-sub">Semester 4 · Day 38 of 120</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:2px"><div class="avatar" id="home-avatar" onclick="showProfile()">AK</div><div style="font-size:9px;color:var(--text3);cursor:pointer" onclick="showProfile()">tap to logout</div></div>
+    </div>
+    <div class="ticker-wrap">
+      <div class="ticker-inner">
+        <div class="ticker-item" id="mkt-nifty">NIFTY 50 <span style="color:var(--green)">24,831 ▲1.2%</span></div>
+        <div class="ticker-item" id="mkt-sensex">SENSEX <span style="color:var(--green)">81,445 ▲0.9%</span></div>
+        <div class="ticker-item" id="mkt-tcs">TCS <span style="color:var(--red)">3,482 ▼0.4%</span></div>
+        <div class="ticker-item" id="mkt-hdfc">HDFC BANK <span style="color:var(--green)">1,721 ▲1.1%</span></div>
+        <div class="ticker-item" id="mkt-infy">INFOSYS <span style="color:var(--green)">1,843 ▲0.7%</span></div>
+        <div class="ticker-item" id="mkt-rel">RELIANCE <span style="color:var(--red)">2,934 ▼0.2%</span></div>
+        <div class="ticker-item">NIFTY 50 <span style="color:var(--green)">24,831 ▲1.2%</span></div>
+        <div class="ticker-item">SENSEX <span style="color:var(--green)">81,445 ▲0.9%</span></div>
+        <div class="ticker-item">TCS <span style="color:var(--red)">3,482 ▼0.4%</span></div>
+        <div class="ticker-item">HDFC BANK <span style="color:var(--green)">1,721 ▲1.1%</span></div>
+      </div>
+    </div>
+    <div class="scroll-area">
+      <div class="hero-card">
+        <div class="hero-label">Total balance</div>
+        <div class="hero-amount" id="home-balance">₹14,382</div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:8px;flex-wrap:wrap">
+          <span class="badge bg">+₹1,247 this month</span>
+          <span style="font-size:11px;color:var(--text2)">Top 27% of students</span>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:14px">
+          <div style="flex:1"><div style="font-size:10px;color:var(--text3);margin-bottom:3px">REAL</div><div style="font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:var(--green)">₹8,200</div></div>
+          <div style="width:1px;background:var(--border)"></div>
+          <div style="flex:1;padding-left:10px"><div style="font-size:10px;color:var(--text3);margin-bottom:3px">VIRTUAL</div><div style="font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:var(--amber)">₹6,182 <span class="bsim">SIM</span></div></div>
+        </div>
+      </div>
+      <div class="card" style="cursor:pointer" onclick="goTo('clock')">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:600">Semester clock</div>
+          <span class="badge bg">On track</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="flex:1"><div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text2);margin-bottom:5px"><span id="sem-day-label">Day 38 of 120</span><span id="sem-rem-label">82 days left</span></div><div class="prog-wrap"><div class="prog-fill" id="sem-bar" style="width:32%;background:var(--green)"></div></div></div>
+          <div style="text-align:right"><div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700" id="sem-daily">₹267</div><div style="font-size:10px;color:var(--text2)">per day</div></div>
+        </div>
+        <div style="font-size:11px;color:var(--text2);margin-top:9px;background:var(--bg3);border-radius:var(--r-sm);padding:7px 10px">⚠️ Diwali in 12 days — plan extra spending now</div>
+      </div>
+      <div class="sec-title">Quick actions</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:0 14px;margin-bottom:14px">
+        <div class="card-sm" style="cursor:pointer;text-align:center" onclick="goTo('sandbox')"><div style="font-size:22px;margin-bottom:5px">🧪</div><div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:600">Sandbox</div><div style="font-size:10px;color:var(--text2)">Simulate investments</div></div>
+        <div class="card-sm" style="cursor:pointer;text-align:center" onclick="goTo('squad')"><div style="font-size:22px;margin-bottom:5px">👥</div><div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:600">Squad savings</div><div style="font-size:10px;color:var(--text2)">Save with friends</div></div>
+        <div class="card-sm" style="cursor:pointer;text-align:center" onclick="goTo('learn')"><div style="font-size:22px;margin-bottom:5px">📚</div><div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:600">Micro-learn</div><div style="font-size:10px;color:var(--text2)">₹100 SIP lessons</div></div>
+        <div class="card-sm" style="cursor:pointer;text-align:center" onclick="goTo('coach')"><div style="font-size:22px;margin-bottom:5px">🤖</div><div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:600">Jameel Jamali</div><div style="font-size:10px;color:var(--text2)">Baccha hai tu mera</div></div>
+      </div>
+      <div class="sec-title">Auto-detected expenses <span class="badge bg" style="font-size:9px;margin-left:4px">SMS Auto</span></div>
+      <div class="card">
+        <div style="font-size:11px;color:var(--text2);margin-bottom:11px;background:var(--bg3);padding:7px 10px;border-radius:var(--r-sm)">📲 Reading UPI SMS automatically — no manual entry needed</div>
+        <div class="row-item"><div class="row-icon" style="background:var(--red-bg)">🍕</div><div class="row-body"><div class="row-title">Zomato</div><div class="row-sub">UPI · SBI · Today 1:34pm</div></div><div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:600;color:var(--red)">-₹340</div></div>
+        <div class="row-item"><div class="row-icon" style="background:var(--blue-bg)">📚</div><div class="row-body"><div class="row-title">NPTEL Course</div><div class="row-sub">UPI · HDFC · Yesterday</div></div><div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:600;color:var(--red)">-₹199</div></div>
+        <div class="row-item"><div class="row-icon" style="background:var(--green-bg)">💸</div><div class="row-body"><div class="row-title">Pocket money</div><div class="row-sub">IMPS · Axis · 3 days ago</div></div><div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:600;color:var(--green)">+₹8,000</div></div>
+        <div class="row-item"><div class="row-icon" style="background:var(--amber-bg)">🚇</div><div class="row-body"><div class="row-title">Metro recharge</div><div class="row-sub">UPI · PhonePe · 4 days ago</div></div><div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:600;color:var(--red)">-₹500</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SANDBOX -->
+  <div class="screen" id="screen-sandbox">
+    <div class="topbar"><div><div class="topbar-title">Sandbox 🧪</div><div class="topbar-sub">Virtual ₹1,00,000 · No real risk</div></div><span class="badge ba">SIM MODE</span></div>
+    <div class="scroll-area" style="padding-top:10px">
+      <div class="hero-card">
+        <div class="hero-label">Virtual portfolio value</div>
+        <div class="hero-amount" id="sandbox-total">₹16,182</div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:8px"><span class="badge bg" id="sandbox-gain">+₹6,182 (+61.8%)</span></div>
+        <div style="font-size:11px;color:var(--text2);margin-top:9px">Day 23 · Data: NSE via Angel One SmartAPI (simulated)</div>
+        <div class="prog-wrap" style="margin-top:7px"><div class="prog-fill" style="width:23%;background:var(--amber)"></div></div>
+      </div>
+      <div class="sec-title">Holdings</div>
+      <div class="card">
+        <div class="row-item"><div class="row-icon" style="background:var(--blue-bg);font-family:'Syne',sans-serif;font-size:10px;font-weight:700;color:var(--blue)">N50</div><div class="row-body"><div class="row-title">Nifty 50 Index Fund</div><div class="row-sub" id="sb-nifty-label">₹5,000 · Mirae Asset · fetching price...</div></div><div style="text-align:right"><div style="font-family:'Syne',sans-serif;font-weight:700;color:var(--green);font-size:13px" id="live-nifty-ret">+12.4%</div><div style="font-size:10px;color:var(--text2)">₹5,620</div></div></div>
+        <div class="row-item"><div class="row-icon" style="background:var(--green-bg);font-family:'Syne',sans-serif;font-size:10px;font-weight:700;color:var(--green)">SBI</div><div class="row-body"><div class="row-title">SBI Small Cap Fund</div><div class="row-sub">₹3,000 · SIP ₹500/mo</div></div><div style="text-align:right"><div style="font-family:'Syne',sans-serif;font-weight:700;color:var(--green);font-size:13px">+18.3%</div><div style="font-size:10px;color:var(--text2)">₹3,549</div></div></div>
+        <div class="row-item"><div class="row-icon" style="background:var(--purple-bg);font-family:'Syne',sans-serif;font-size:10px;font-weight:700;color:var(--purple)">TCS</div><div class="row-body"><div class="row-title">TCS stock</div><div class="row-sub" id="sb-tcs-label">₹2,000 · 0.57 shares · fetching price...</div></div><div style="text-align:right"><div style="font-family:'Syne',sans-serif;font-weight:700;color:var(--red);font-size:13px" id="live-tcs-ret">-4.1%</div><div style="font-size:10px;color:var(--text2)">₹1,918</div></div></div>
+      </div>
+      <div class="sec-title">Add simulation</div>
+      <div class="card">
+        <div style="margin-bottom:11px"><div style="font-size:11px;color:var(--text2);margin-bottom:5px">Instrument</div><select id="sim-instrument" onchange="updateSim()"><option value="0.12">Nifty 50 Index Fund (12% avg)</option><option value="0.15">Mirae Mid Cap Fund (15%)</option><option value="0.18">Parag Parikh Flexi (18%)</option><option value="0.08">SBI Debt Fund (8%)</option><option value="0.07">Digital Gold (7%)</option></select></div>
+        <div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text2);margin-bottom:5px"><span>Monthly SIP</span><span style="font-family:'Syne',sans-serif;font-weight:600;color:var(--text)" id="sim-sip-out">₹500</span></div><input type="range" min="100" max="5000" step="100" value="500" id="sim-sip" oninput="updateSim()"></div>
+        <div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text2);margin-bottom:5px"><span>Years</span><span style="font-family:'Syne',sans-serif;font-weight:600;color:var(--text)" id="sim-yrs-out">3 years</span></div><input type="range" min="1" max="10" step="1" value="3" id="sim-yrs" oninput="updateSim()"></div>
+        <div style="background:var(--bg3);border-radius:var(--r);padding:13px;margin-bottom:11px">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center">
+            <div><div style="font-size:10px;color:var(--text3);margin-bottom:3px">Invested</div><div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700" id="sim-invested">₹18,000</div></div>
+            <div><div style="font-size:10px;color:var(--text3);margin-bottom:3px">Value</div><div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--green)" id="sim-value">₹22,401</div></div>
+            <div><div style="font-size:10px;color:var(--text3);margin-bottom:3px">Gain</div><div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--green)" id="sim-gain">+₹4,401</div></div>
+          </div>
+          <div style="margin-top:9px;font-size:11px;color:var(--text2);text-align:center;line-height:1.5" id="sim-insight">Starting today beats starting next year — always.</div>
+        </div>
+        <button class="btn btn-outline" onclick="showToast('Simulation added! 🎉')">+ Add this simulation</button>
+      </div>
+      <div class="card" style="background:var(--green-dim);border-color:rgba(0,230,118,.25)">
+        <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:6px">Ready to go real? 🚀</div>
+        <div style="font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.6">Your simulation has been running 23 days. One tap converts to a real SIP via Zerodha Kite Connect API. 3-min KYC via DigiLocker. SEBI compliant.</div>
+        <button class="btn btn-primary" onclick="showToast('KYC starting — Aadhaar + PAN via DigiLocker...')">Go real with ₹500/month</button>
+        <div style="font-size:10px;color:var(--text2);margin-top:7px;text-align:center">Routes via SEBI-registered broker · No personal data stored by Finvest</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLOCK -->
+  <div class="screen" id="screen-clock">
+    <div class="topbar"><div><div class="topbar-title">Semester clock 🕐</div><div class="topbar-sub">June – November 2025</div></div></div>
+    <div class="scroll-area" style="padding-top:14px">
+      <div class="sem-ring-wrap"><div class="sem-ring"><svg width="130" height="130" viewBox="0 0 130 130"><circle cx="65" cy="65" r="54" fill="none" stroke="#1a1a26" stroke-width="11"/><circle cx="65" cy="65" r="54" fill="none" stroke="#00e676" stroke-width="11" stroke-dasharray="339.3" stroke-dashoffset="230.6" stroke-linecap="round"/></svg><div class="sem-ring-inner"><div class="sem-days">82</div><div class="sem-days-lbl">days left</div></div></div></div>
+      <div class="sec-title">My income this semester</div>
+      <div style="padding:0 14px;margin-bottom:12px">
+        <div class="income-type selected"><div><div style="font-size:13px;font-weight:500">Pocket money</div><div style="font-size:10px;color:var(--text2)">Monthly · auto-reset</div></div><div class="income-type-amt">₹8,000</div></div>
+        <div class="income-type selected"><div><div style="font-size:13px;font-weight:500">College stipend</div><div style="font-size:10px;color:var(--text2)">Lab assistant</div></div><div class="income-type-amt">₹3,000</div></div>
+        <div class="income-type" onclick="showToast('Freelance income added!')"><div><div style="font-size:13px;font-weight:500">Freelance income</div><div style="font-size:10px;color:var(--text2)">Tap to add</div></div><div style="color:var(--text3);font-size:20px">+</div></div>
+        <div class="income-type" onclick="showToast('Scholarship added!')"><div><div style="font-size:13px;font-weight:500">Scholarship</div><div style="font-size:10px;color:var(--text2)">Tap to add</div></div><div style="color:var(--text3);font-size:20px">+</div></div>
+      </div>
+      <div class="sec-title">Budget planner</div>
+      <div class="card">
+        <div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px"><span style="color:var(--text2)">Food & hostel</span><span style="font-family:'Syne',sans-serif;font-weight:600" id="clock-food">₹4,500</span></div><input type="range" min="2000" max="8000" step="500" value="4500" id="clock-food-range" oninput="updateClock()"></div>
+        <div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px"><span style="color:var(--text2)">Investing (SIP)</span><span style="font-family:'Syne',sans-serif;font-weight:600;color:var(--green)" id="clock-sip">₹1,000</span></div><input type="range" min="0" max="3000" step="100" value="1000" id="clock-sip-range" oninput="updateClock()"></div>
+        <div style="background:var(--bg3);border-radius:var(--r);padding:11px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:7px"><span style="font-size:12px;color:var(--text2)">Daily discretionary</span><span style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--green)" id="clock-daily">₹208</span></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:7px"><span style="font-size:12px;color:var(--text2)">4-year corpus</span><span style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700" id="clock-corpus">₹65k</span></div>
+          <div style="font-size:11px;color:var(--text2);line-height:1.6" id="clock-insight">₹1,000/month SIP — by placement you'll have more than most freshers save in year one.</div>
+        </div>
+      </div>
+      <div class="sec-title">Smart alerts</div>
+      <div class="card">
+        <div class="row-item"><div class="row-icon" style="background:var(--amber-bg)">🪔</div><div class="row-body"><div class="row-title">Diwali in 12 days</div><div class="row-sub">Plan ₹1,500 extra</div></div><span class="badge ba">Plan</span></div>
+        <div class="row-item"><div class="row-icon" style="background:var(--red-bg)">📝</div><div class="row-body"><div class="row-title">End-sem in 68 days</div><div class="row-sub">Study materials ~₹800</div></div><span class="badge bb">Info</span></div>
+        <div class="row-item"><div class="row-icon" style="background:var(--green-bg)">💼</div><div class="row-body"><div class="row-title">Placement season</div><div class="row-sub">Save ₹300/week now</div></div><span class="badge bg">Save</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SQUAD -->
+  <div class="screen" id="screen-squad">
+    <div class="topbar"><div><div class="topbar-title">Squad savings 👥</div><div class="topbar-sub">Save together, go further</div></div><button class="btn btn-outline btn-sm" onclick="showToast('New squad goal created!')">+ New</button></div>
+    <div class="scroll-area" style="padding-top:10px">
+      <div class="card" style="border-color:rgba(0,230,118,.2)">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:11px"><div><div style="font-size:10px;color:var(--text3);margin-bottom:3px;text-transform:uppercase;letter-spacing:.06em">Active goal</div><div style="font-family:'Syne',sans-serif;font-size:17px;font-weight:700">Goa trip 🏖️</div></div><span class="badge bg">On track</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text2);margin-bottom:5px"><span>₹18,400 of ₹25,000</span><span>74%</span></div>
+        <div class="prog-wrap" style="margin-bottom:12px"><div class="prog-fill" style="width:74%;background:var(--green)"></div></div>
+        <div style="margin-bottom:12px">
+          <div class="squad-member"><div class="squad-av" style="background:var(--green-bg);color:var(--green)">AK</div><div style="flex:1"><div style="font-size:12px;font-weight:500">You (Arjun)</div><div class="prog-wrap" style="margin-top:3px"><div class="prog-fill" style="width:88%;background:var(--green)"></div></div></div><div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:600;color:var(--green)">₹5,500</div></div>
+          <div class="squad-member"><div class="squad-av" style="background:var(--blue-bg);color:var(--blue)">RS</div><div style="flex:1"><div style="font-size:12px;font-weight:500">Rohit S</div><div class="prog-wrap" style="margin-top:3px"><div class="prog-fill" style="width:70%;background:var(--blue)"></div></div></div><div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:600;color:var(--blue)">₹4,375</div></div>
+          <div class="squad-member"><div class="squad-av" style="background:var(--purple-bg);color:var(--purple)">PG</div><div style="flex:1"><div style="font-size:12px;font-weight:500">Priya G</div><div class="prog-wrap" style="margin-top:3px"><div class="prog-fill" style="width:92%;background:var(--purple)"></div></div></div><div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:600;color:var(--purple)">₹5,750</div></div>
+          <div class="squad-member"><div class="squad-av" style="background:var(--amber-bg);color:var(--amber)">VK</div><div style="flex:1"><div style="font-size:12px;font-weight:500">Vikram K</div><div class="prog-wrap" style="margin-top:3px"><div class="prog-fill" style="width:44%;background:var(--amber)"></div></div></div><div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:600;color:var(--amber)">₹2,775 ⚠️</div></div>
+        </div>
+        <div style="background:var(--amber-bg);border-radius:var(--r-sm);padding:9px 11px;font-size:11px;color:var(--amber);margin-bottom:11px">Vikram is ₹1,850 behind. Nudge him?</div>
+        <div style="display:flex;gap:8px"><button class="btn btn-outline btn-sm" onclick="showToast('Nudge sent to Vikram! 👋')">Nudge Vikram</button><button class="btn btn-primary btn-sm" onclick="showToast('₹500 added!')">Add ₹500</button></div>
+      </div>
+      <div class="card" style="border-style:dashed;cursor:pointer;text-align:center;padding:22px" onclick="showToast('New squad goal created!')"><div style="font-size:26px;margin-bottom:7px">+</div><div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:600">Create a squad goal</div><div style="font-size:11px;color:var(--text2);margin-top:3px">Trip, gadget, hostel fest, anything</div></div>
+    </div>
+  </div>
+
+  <!-- LEARN -->
+  <div class="screen" id="screen-learn">
+    <div class="topbar"><div><div class="topbar-title">Micro-learn 📚</div><div class="topbar-sub">Learn it, invest ₹100. Same session.</div></div></div>
+    <div class="scroll-area" style="padding-top:10px">
+      <div id="lesson-panel" style="display:none">
+        <div class="card">
+          <div style="font-size:10px;color:var(--text3);margin-bottom:9px;text-transform:uppercase;letter-spacing:.06em" id="lesson-topic"></div>
+          <div class="lesson-prog" id="lesson-prog"></div>
+          <div id="lesson-steps"></div>
+          <div style="display:flex;gap:8px;margin-top:14px"><button class="btn btn-outline" id="lesson-prev-btn" onclick="lessonNav(-1)" style="flex:1">Back</button><button class="btn btn-primary" id="lesson-next-btn" onclick="lessonNav(1)" style="flex:1">Next →</button></div>
+        </div>
+      </div>
+      <div id="lesson-list">
+        <div class="chip-row" style="margin-bottom:11px"><div class="chip active">All</div><div class="chip">Mutual Funds</div><div class="chip">Stocks</div><div class="chip">Gold</div></div>
+        <div class="learn-card" onclick="startLesson(0)"><div class="learn-card-top"><span class="badge bg" style="margin-bottom:7px">Beginner</span><div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:5px">What is a Nifty 50 Index Fund?</div><div style="font-size:12px;color:var(--text2);line-height:1.5">India's top 50 companies in one investment. 3 steps then ₹100 SIP.</div></div><div class="learn-card-bot"><span style="font-size:11px;color:var(--text2)">2 min · 3 steps</span><span class="badge bg">Invest ₹100 after</span></div></div>
+        <div class="learn-card" onclick="startLesson(1)"><div class="learn-card-top"><span class="badge bb" style="margin-bottom:7px">Beginner</span><div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:5px">SIP vs lump sum — which wins?</div><div style="font-size:12px;color:var(--text2);line-height:1.5">Why ₹500/month beats ₹6,000 once a year. The math surprises everyone.</div></div><div class="learn-card-bot"><span style="font-size:11px;color:var(--text2)">3 min · 4 steps</span><span class="badge bb">Invest ₹500 after</span></div></div>
+        <div class="learn-card" onclick="startLesson(2)"><div class="learn-card-top"><span class="badge ba" style="margin-bottom:7px">Intermediate</span><div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:5px">Digital gold — real gold, phone mein</div><div style="font-size:12px;color:var(--text2);line-height:1.5">Buy 0.1g of 24K gold from ₹100. Safe, liquid, no storage hassle.</div></div><div class="learn-card-bot"><span style="font-size:11px;color:var(--text2)">2 min · 3 steps</span><span class="badge ba">Buy ₹100 gold after</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COACH -->
+  <div class="screen" id="screen-coach">
+    <div class="topbar"><div><div class="topbar-title">Jameel Jamali 🎭</div><div class="topbar-sub">Baccha hai tu mera · General info only, not SEBI advice</div></div></div>
+    <div style="flex:1;overflow-y:auto;padding-top:14px;padding-bottom:14px" id="chat-area">
+      <div style="text-align:center;margin:6px 14px 18px"><div style="width:72px;height:72px;border-radius:50%;overflow:hidden;border:2px solid #c8965a;margin:0 auto 7px;background:#1a1408"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCI+PGRlZnM+PGNsaXBQYXRoIGlkPSJjIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI1MCIvPjwvY2xpcFBhdGg+PC9kZWZzPjxnIGNsaXAtcGF0aD0idXJsKCNjKSI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiMxYTE0MDgiLz48cmVjdCB4PSIwIiB5PSI1NSIgd2lkdGg9IjEwMCIgaGVpZ2h0PSI0NSIgZmlsbD0iIzJhMWYwMCIvPjxlbGxpcHNlIGN4PSI1MCIgY3k9IjM4IiByeD0iMjIiIHJ5PSIyNCIgZmlsbD0iI2M4OTY1YSIvPjxyZWN0IHg9IjI4IiB5PSIzNiIgd2lkdGg9IjQ0IiBoZWlnaHQ9IjI4IiBmaWxsPSIjYzg5NjVhIi8+PGVsbGlwc2UgY3g9IjUwIiBjeT0iNjQiIHJ4PSIyOCIgcnk9IjEwIiBmaWxsPSIjOEI2OTE0Ii8+PHJlY3QgeD0iMjIiIHk9IjYyIiB3aWR0aD0iNTYiIGhlaWdodD0iMzgiIGZpbGw9IiMxYTNhMWEiLz48cmVjdCB4PSIzMCIgeT0iNjIiIHdpZHRoPSI0MCIgaGVpZ2h0PSI2IiBmaWxsPSIjMmE1YTJhIi8+PHBhdGggZD0iTTM2IDM4IFE1MCAyOCA2NCAzOCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNWEzYTAwIiBzdHJva2Utd2lkdGg9IjIuNSIvPjxyZWN0IHg9IjI4IiB5PSIyMCIgd2lkdGg9IjQ0IiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjOEIwMDAwIi8+PHJlY3QgeD0iMjYiIHk9IjE2IiB3aWR0aD0iNDgiIGhlaWdodD0iOCIgcng9IjQiIGZpbGw9IiNhMDAiLz48ZWxsaXBzZSBjeD0iNTAiIGN5PSIxNiIgcng9IjI0IiByeT0iNSIgZmlsbD0iI2NjMDAwMCIvPjxlbGxpcHNlIGN4PSIzOCIgY3k9IjQzIiByeD0iNSIgcnk9IjYiIGZpbGw9IiNjODk2NWEiLz48ZWxsaXBzZSBjeD0iNjIiIGN5PSI0MyIgcng9IjUiIHJ5PSI2IiBmaWxsPSIjYzg5NjVhIi8+PGVsbGlwc2UgY3g9IjQwIiBjeT0iNDQiIHJ4PSIzIiByeT0iMy41IiBmaWxsPSIjZmZmIi8+PGVsbGlwc2UgY3g9IjYwIiBjeT0iNDQiIHJ4PSIzIiByeT0iMy41IiBmaWxsPSIjZmZmIi8+PGNpcmNsZSBjeD0iNDEiIGN5PSI0NCIgcj0iMS44IiBmaWxsPSIjMmExODAwIi8+PGNpcmNsZSBjeD0iNjEiIGN5PSI0NCIgcj0iMS44IiBmaWxsPSIjMmExODAwIi8+PHBhdGggZD0iTTQ0IDUyIFE1MCA1NiA1NiA1MiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjOEI0NTEzIiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHJlY3QgeD0iNDQiIHk9IjUxIiB3aWR0aD0iMTIiIGhlaWdodD0iMyIgcng9IjEuNSIgZmlsbD0iI2Q0ODI2YSIvPjxyZWN0IHg9IjM2IiB5PSIzNiIgd2lkdGg9IjgiIGhlaWdodD0iMiIgcng9IjEiIGZpbGw9IiMzYTIyMDAiIHRyYW5zZm9ybT0icm90YXRlKC01LDQwLDM3KSIvPjxyZWN0IHg9IjU2IiB5PSIzNiIgd2lkdGg9IjgiIGhlaWdodD0iMiIgcng9IjEiIGZpbGw9IiMzYTIyMDAiIHRyYW5zZm9ybT0icm90YXRlKDUsNjAsMzcpIi8+PHBhdGggZD0iTTMyIDU2IFEyNCA3MCAyNiA5MCBMNzQgOTAgUTc2IDcwIDY4IDU2IiBmaWxsPSIjMWEzYTFhIi8+PHBhdGggZD0iTTQ0IDU2IEw0NCA5MCBNNTYgNTYgTDU2IDkwIiBzdHJva2U9IiMyYTVhMmEiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIvPjxyZWN0IHg9IjM0IiB5PSIyNCIgd2lkdGg9IjQiIGhlaWdodD0iMTQiIGZpbGw9IiNjODk2NWEiLz48cmVjdCB4PSI2MiIgeT0iMjQiIHdpZHRoPSI0IiBoZWlnaHQ9IjE0IiBmaWxsPSIjYzg5NjVhIi8+PC9nPjwvc3ZnPg==" style="width:100%;height:100%" alt="Jameel Jamali"/></div><div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:600">Jameel Jamali</div><div style="font-size:11px;color:#c8965a;font-style:italic;font-weight:600">"Baccha hai tu mera"</div><div style="font-size:10px;color:var(--text2);margin-top:2px">Dhurandhar 1 &amp; 2 · Your Finance Mastermind</div></div>
+      <div class="coach-lbl">Jameel Jamali</div>
+      <div class="chat-bub"><p>Baccha hai tu mera! 🎭 Aaj tera Zomato spend ₹340 tha — is mahine ₹2,100 ho gaya. Jameel Jamali kehta hai — agar ₹1,000 cut karein toh ek extra SIP banta hai. Kya lagta hai?<br><br><em style="font-size:10px;color:var(--text3)">General info, SEBI investment advice nahi.</em></p></div>
+      <div class="chat-bub user"><p>haan bhai but food important hai</p></div>
+      <div class="coach-lbl">Jameel Jamali</div>
+      <div class="chat-bub"><p>Arre baccha hai tu mera! 😄 Mess skip karne ko nahi bol raha — Jameel Jamali bhi khana khata hai! Sirf delivery apps — week mein 3 → 2 orders. Bachega ₹500. SIP chalti rahegi. Dhurandhar ki tarah soch — choti chaal, bada fayda. Deal? 🤝</p></div>
+      <div id="chat-typing" style="display:none"><div class="coach-lbl">Jameel Jamali</div><div class="chat-bub"><p class="pulse">typing...</p></div></div>
+    </div>
+    <div style="padding:7px 14px;border-top:1px solid var(--border);background:var(--bg2)">
+      <div class="chip-row" style="padding:0;margin-bottom:9px">
+        <div class="chip" onclick="askCoach('Budget check karo')">Budget check</div>
+        <div class="chip" onclick="askCoach('Best SIP for ₹500?')">Best SIP ₹500</div>
+        <div class="chip" onclick="askCoach('Tax basics for students')">Tax basics</div>
+        <div class="chip" onclick="askCoach('Sandbox advice')">Sandbox advice</div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <input type="text" id="chat-input" placeholder="Jameel se kuch bhi pucho..." style="flex:1;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r-sm);padding:9px 12px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none" onkeydown="if(event.key==='Enter')sendChat()">
+        <button class="btn btn-primary btn-sm" onclick="sendChat()">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <nav class="nav">
+    <div class="nav-item active" id="nav-home" onclick="goTo('home')"><div class="nav-icon">🏠</div><div class="nav-label">Home</div><div class="nav-dot"></div></div>
+    <div class="nav-item" id="nav-sandbox" onclick="goTo('sandbox')"><div class="nav-icon">🧪</div><div class="nav-label">Sandbox</div><div class="nav-dot"></div></div>
+    <div class="nav-item" id="nav-clock" onclick="goTo('clock')"><div class="nav-icon">🕐</div><div class="nav-label">Semester</div><div class="nav-dot"></div></div>
+    <div class="nav-item" id="nav-squad" onclick="goTo('squad')"><div class="nav-icon">👥</div><div class="nav-label">Squad</div><div class="nav-dot"></div></div>
+    <div class="nav-item" id="nav-learn" onclick="goTo('learn')"><div class="nav-icon">📚</div><div class="nav-label">Learn</div><div class="nav-dot"></div></div>
+    <div class="nav-item" id="nav-coach" onclick="goTo('coach')"><div class="nav-icon">🎭</div><div class="nav-label">Jameel</div><div class="nav-dot"></div></div>
+  </nav>
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ── USER DB ──
+const DB='finvest_users', SES='finvest_session';
+const getUsers=()=>JSON.parse(localStorage.getItem(DB)||'[]');
+const saveUsers=u=>localStorage.setItem(DB,JSON.stringify(u));
+const getSession=()=>JSON.parse(localStorage.getItem(SES)||'null');
+const setSession=u=>localStorage.setItem(SES,JSON.stringify(u));
+
+function showLayer(id){
+  document.querySelectorAll('.layer').forEach(l=>l.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ── SIGNUP ──
+function doSignup(){
+  const name=document.getElementById('su-name').value.trim();
+  const email=document.getElementById('su-email').value.trim();
+  const pass=document.getElementById('su-pass').value;
+  const college=document.getElementById('su-college').value.trim();
+  const year=document.getElementById('su-year').value;
+  const branch=document.getElementById('su-branch').value.trim();
+  const err=document.getElementById('signup-err');
+  if(!name||!email||pass.length<6){
+    err.textContent='Please fill all fields. Password must be 6+ characters.';
+    err.classList.add('show'); return;
+  }
+  const users=getUsers();
+  if(users.find(u=>u.email===email)){
+    err.textContent='Account with this email/phone already exists.';
+    err.classList.add('show'); return;
+  }
+  err.classList.remove('show');
+  const user={id:Date.now(),name,email,college,year,branch,password:btoa(pass),joinedAt:new Date().toISOString(),lastLogin:new Date().toISOString(),status:'new',source:'email'};
+  users.push(user); saveUsers(users); setSession(user); launchApp(user, true);
+}
+
+// ── LOGIN ──
+function doLogin(){
+  const email=document.getElementById('li-email').value.trim();
+  const pass=document.getElementById('li-pass').value;
+  const err=document.getElementById('login-err');
+  const users=getUsers();
+  const user=users.find(u=>u.email===email&&u.password===btoa(pass));
+  if(!user){err.classList.add('show');return;}
+  err.classList.remove('show');
+  user.status='active'; user.lastLogin=new Date().toISOString();
+  const idx=users.findIndex(u=>u.id===user.id);
+  users[idx]=user; saveUsers(users); setSession(user); launchApp(user, false);
+}
+
+// ── OTP ──
+function sendOTP(){
+  const phone=document.getElementById('otp-phone').value.trim();
+  if(!phone||phone.length<10){showToast('Enter a valid number');return;}
+  document.getElementById('otp-sent-to').textContent='Code sent to '+phone;
+  document.getElementById('otp-step1').style.display='none';
+  document.getElementById('otp-step2').style.display='block';
+  document.getElementById('o0').focus();
+}
+function otpMove(el,idx){if(el.value&&idx<5)document.getElementById('o'+(idx+1)).focus();}
+function verifyOTP(){
+  const code=[0,1,2,3,4,5].map(i=>document.getElementById('o'+i).value).join('');
+  const err=document.getElementById('otp-err');
+  if(code!=='123456'){err.classList.add('show');return;}
+  err.classList.remove('show');
+  const phone=document.getElementById('otp-phone').value.trim();
+  const users=getUsers();
+  let user=users.find(u=>u.email===phone);
+  if(!user){
+    user={id:Date.now(),name:'Student',email:phone,college:'—',year:'—',branch:'—',password:'',joinedAt:new Date().toISOString(),lastLogin:new Date().toISOString(),status:'new',source:'otp'};
+    users.push(user); saveUsers(users);
+  }
+  setSession(user); launchApp(user, false);
+}
+
+// ── GUEST ──
+function guestMode(){
+  const guest={id:0,name:'Guest',email:'guest',college:'—',year:'—',branch:'—',status:'guest',source:'guest'};
+  setSession(guest); launchApp(guest);
+}
+
+// ── LAUNCH APP ──
+function launchApp(user, isNew){
+  if(user.status==='guest'){
+    enterApp(user);
+    return;
+  }
+  const prefs=JSON.parse(localStorage.getItem(OB_DATA_KEY)||'{}');
+  if(isNew || !prefs.onboardingDone){
+    const greeting = isNew ? 'Great to have you, ' : 'Welcome back, ';
+    document.getElementById('ob-welcome-name').textContent=greeting+user.name.split(' ')[0]+'! Let\'s set up your account in 3 quick steps.';
+    showLayer('layer-onboarding');
+    obStep(0);
+  } else {
+    enterApp(user);
+  }
+}
+function enterApp(user){
+  showLayer('layer-app');
+  const initials=user.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  document.getElementById('home-avatar').textContent=initials;
+  document.getElementById('home-greeting').textContent='Namaste, '+user.name.split(' ')[0]+' 👋';
+  if(user.status==='guest') document.getElementById('home-sub').textContent='Guest mode · Sign up to save progress';
+  updateHomeWithUserData();
+}
+
+function showProfile(){
+  const u=getSession();
+  if(!u) return;
+  const info = u.name + (u.college&&u.college!=='—'?' · '+u.college:'') + (u.year&&u.year!=='—'?' · '+u.year:'');
+  const action = confirm(info + '\n\nOptions:\n• OK = Logout\n• Cancel = Stay');
+  if(action){ doLogout(); }
+}
+function doLogout(){
+  localStorage.removeItem('finvest_session');
+  showLayer('layer-landing');
+  showToast('Logged out successfully');
+}
+
+// ── ADMIN ──
+function doAdminLogin(){
+  const email=document.getElementById('adm-email').value.trim();
+  const pass=document.getElementById('adm-pass').value;
+  const err=document.getElementById('admin-err');
+  if(email==='admin@finvest.in'&&pass==='admin123'){
+    err.classList.remove('show');
+    renderAdminDashboard();
+    showLayer('layer-admin');
+  } else { err.classList.add('show'); }
+}
+
+function renderAdminDashboard(){
+  const users=getUsers();
+  const today=users.filter(u=>{const d=new Date(u.joinedAt);return d.toDateString()===new Date().toDateString();});
+  const returning=users.filter(u=>u.status==='active');
+  document.getElementById('admin-stats').innerHTML=`
+    <div class="admin-stat"><div class="admin-stat-val" style="color:var(--green)">${users.length}</div><div class="admin-stat-lbl">Total registered</div></div>
+    <div class="admin-stat"><div class="admin-stat-val" style="color:var(--blue)">${today.length}</div><div class="admin-stat-lbl">Joined today</div></div>
+    <div class="admin-stat"><div class="admin-stat-val" style="color:var(--amber)">${returning.length}</div><div class="admin-stat-lbl">Returning users</div></div>
+  `;
+  const list=document.getElementById('user-list');
+  if(!users.length){
+    list.innerHTML='<div style="text-align:center;padding:36px 20px;color:var(--text2)"><div style="font-family:Syne,sans-serif;font-size:16px;color:var(--text);margin-bottom:8px">No users yet</div>Share your app link — users appear here as they sign up.</div>';
+    return;
+  }
+  list.innerHTML=users.slice().reverse().map(u=>{
+    const date=u.joinedAt?new Date(u.joinedAt).toLocaleDateString('en-IN',{day:'numeric',month:'short'}):'—';
+    const sc=u.status==='active'?'s-active':u.status==='guest'?'s-guest':'s-new';
+    const sl=u.status==='active'?'Returning':u.status==='guest'?'Guest':'New';
+    return `<div class="tbl-row">
+      <div><div class="u-name">${u.name}</div><div class="u-sub">${u.college||'—'}</div></div>
+      <div><div class="u-name" style="font-weight:400;font-size:12px">${u.email}</div><div class="u-sub">via ${u.source||'email'}</div></div>
+      <div><div class="u-name" style="font-weight:400;font-size:12px">${u.branch||'—'}</div><div class="u-sub">${u.year||'—'}</div></div>
+      <div class="u-sub">${date}</div>
+      <div><span class="u-status ${sc}">${sl}</span></div>
+    </div>`;
+  }).join('');
+}
+
+function clearAllUsers(){
+  if(confirm('Delete all user data? Cannot be undone.')){
+    localStorage.removeItem(DB);
+    renderAdminDashboard();
+    showToast('All data cleared');
+  }
+}
+
+// ── NAV ──
+function goTo(s){
+  document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));
+  document.getElementById('screen-'+s).classList.add('active');
+  const n=document.getElementById('nav-'+s);
+  if(n) n.classList.add('active');
+}
+
+// ── TOAST ──
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+// ── SANDBOX ──
+function updateSim(){
+  const sip=parseInt(document.getElementById('sim-sip').value);
+  const yrs=parseInt(document.getElementById('sim-yrs').value);
+  const rate=parseFloat(document.getElementById('sim-instrument').value);
+  document.getElementById('sim-sip-out').textContent='₹'+sip.toLocaleString('en-IN');
+  document.getElementById('sim-yrs-out').textContent=yrs+' year'+(yrs>1?'s':'');
+  const months=yrs*12,r=rate/12;
+  const fv=sip*((Math.pow(1+r,months)-1)/r)*(1+r);
+  const invested=sip*months,gain=fv-invested;
+  document.getElementById('sim-invested').textContent='₹'+Math.round(invested).toLocaleString('en-IN');
+  document.getElementById('sim-value').textContent='₹'+Math.round(fv).toLocaleString('en-IN');
+  document.getElementById('sim-gain').textContent='+₹'+Math.round(gain).toLocaleString('en-IN');
+  const tips=['Age '+(19+yrs)+' pe ₹'+Math.round(fv/1000)+'k hoga. That\'s real money.','Beats FD by ₹'+Math.round(gain*0.38).toLocaleString('en-IN')+' over '+yrs+' years.','Skipping '+Math.round(sip/160)+' Zomato orders/month builds this.','Starting today beats starting next year.'];
+  document.getElementById('sim-insight').textContent=tips[yrs%tips.length];
+}
+document.getElementById('sim-instrument').addEventListener('change',updateSim);
+
+// ── CLOCK ──
+function updateClock(){
+  const food=parseInt(document.getElementById('clock-food-range').value);
+  const sip=parseInt(document.getElementById('clock-sip-range').value);
+  const daily=(11000-food-sip)/30;
+  const corpus=sip*12*4*Math.pow(1.12,4);
+  document.getElementById('clock-food').textContent='₹'+food.toLocaleString('en-IN');
+  document.getElementById('clock-sip').textContent='₹'+sip.toLocaleString('en-IN');
+  document.getElementById('clock-daily').textContent='₹'+Math.round(daily).toLocaleString('en-IN');
+  document.getElementById('clock-corpus').textContent='₹'+Math.round(corpus/1000)+'k';
+  document.getElementById('clock-insight').textContent=sip>0?'₹'+sip+'/month SIP — 4-year corpus beats most freshers\' first-year savings.':'Even ₹100/month builds the habit. Start small.';
+}
+
+// ── LESSONS ──
+const lessons=[
+  {topic:'What is a Nifty 50 Index Fund?',steps:[
+    {title:'What is it?',body:'Nifty 50 is India\'s top 50 companies — Reliance, TCS, Infosys, HDFC Bank. A Nifty 50 index fund buys all 50. You own a tiny piece of India\'s biggest businesses.'},
+    {title:'How does it earn?',body:'~12% annual returns over 20 years. ₹500/month for 5 years ≈ ₹41,000 from ₹30,000 invested. Compounding does the work.'},
+    {title:'Why perfect for students',body:'Start from ₹100. Zero commission on direct plans. Available on Groww, Zerodha, Kuvera. No stock-picking. No stress.'}
+  ],invest:'₹100 SIP'},
+  {topic:'SIP vs Lump Sum — which wins?',steps:[
+    {title:'The fear problem',body:'Markets go up and down. SIP splits ₹6,000 into ₹500/month — you buy at all prices, high and low. Rupee cost averaging.'},
+    {title:'The math',body:'Same money — lump sum in January, market crashes March: -15%. SIP over 12 months: average cost lower, losses cushioned. You sleep better.'},
+    {title:'SIP = habit',body:'Set it, forget it. Auto-debit 5th of every month. 4 years college = corpus you didn\'t notice building.'},
+    {title:'Start with ₹100',body:'All platforms allow ₹100 SIP. You\'re building the habit first. Returns come when the habit stays.'}
+  ],invest:'₹500 SIP'},
+  {topic:'Digital gold — real gold, phone mein',steps:[
+    {title:'What is it?',body:'24K pure gold, in a vault, owned by you. Buy from ₹1. Sell anytime. No making charges, no storage. Platforms: Groww Gold, PhonePe Gold.'},
+    {title:'Is it safe?',body:'Held by MMTC-PAMP or SafeGold — India\'s most trusted vaults. SEBI-regulated. Convert to physical gold after accumulating enough.'},
+    {title:'When to use it',body:'Gold is a hedge. When markets fall, gold often rises. 10-15% of portfolio in gold is smart. Great for Dhanteras savings too 🪙'}
+  ],invest:'₹100 digital gold'}
+];
+let cL=0,cS=0;
+function startLesson(i){cL=i;cS=0;document.getElementById('lesson-list').style.display='none';document.getElementById('lesson-panel').style.display='block';renderLesson();}
+function renderLesson(){
+  const l=lessons[cL];
+  document.getElementById('lesson-topic').textContent=l.topic;
+  document.getElementById('lesson-prog').innerHTML=l.steps.map((_,i)=>`<div class="lesson-dot ${i<=cS?'done':''}"></div>`).join('');
+  document.getElementById('lesson-steps').innerHTML=l.steps.map((s,i)=>`<div class="lesson-step ${i===cS?'active':''}"><div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:9px">${s.title}</div><div style="font-size:13px;color:var(--text2);line-height:1.7">${s.body}</div></div>`).join('');
+  const last=cS===l.steps.length-1;
+  document.getElementById('lesson-next-btn').textContent=last?'Invest '+l.invest+' →':'Next →';
+  document.getElementById('lesson-prev-btn').style.display=cS===0?'none':'block';
+}
+function lessonNav(d){
+  const l=lessons[cL];
+  if(d===1&&cS===l.steps.length-1){document.getElementById('lesson-panel').style.display='none';document.getElementById('lesson-list').style.display='block';showToast('Lesson complete! '+l.invest+' unlocked 🎉');return;}
+  if(d===-1&&cS===0){document.getElementById('lesson-panel').style.display='none';document.getElementById('lesson-list').style.display='block';return;}
+  cS+=d;renderLesson();
+}
+
+// ── COACH ──
+const coachReplies={
+  'Budget check karo':'Baccha hai tu mera! ✅\n\nJameel Jamali ki nazar se — Zomato ₹2,100 is mahine? Yeh toh bada blunder hai!\n• Mess ka use badha\n• Zomato sirf weekends\n• Bachega ₹800 → SIP mein daal!\n\nDhurandhar mein bhi aise chaal chalte hain — chhoti bachat, bada khel! 🎭\n(General info, SEBI advice nahi)',
+  'Best SIP for ₹500?':'Baccha hai tu mera — sun meri baat! 🎭\n\n₹500/month ke liye Jameel ki top picks:\n\n🥇 Nifty 50 Index — safest, broadest\n🥈 Mirae Large & Midcap — higher returns\n🥉 Parag Parikh Flexi — international bhi\n\nGroww/Kuvera pe shuru karo. Zero commission.\nJameel Jamali guarantee karta hai — start karo aaj!\n(Educational info only)',
+  'Tax basics for students':'Arre baccha hai tu mera — tax se daarta hai? 🎭\n\nJameel samjhata hai:\n• ₹2.5L se kam income → zero tax!\n• Scholarship → tax-free Sec 10(16)\n• MF LTCG (1yr+) → 10% but ₹1L/yr exempt\n\nMost students → effectively zero tax on investments!\nDhurandhar strategy — legal way se save karo!',
+  'Sandbox advice':'Baccha hai tu mera — Jameel ki sandbox strategy! 🎭\n\nCurrent portfolio: Nifty 50, SBI Small Cap, TCS.\n\nAdd karo:\n🔵 HDFC Bank — strongest private bank\n🟢 Parag Parikh Flexi — consistently beats Nifty\n🟡 Digital Gold — ₹200 worth\n\n7 days observe karo, phir real decide karo.\nJameel bolta hai — pehle soch, phir chaal! 🎯'
+};
+function askCoach(q){addUserMsg(q);showTyping();setTimeout(()=>{hideTyping();addCoachMsg(coachReplies[q]||'Baccha hai tu mera! 🎭 Achha sawaal hai — Jameel impressed hai!\n\nSandbox mein simulate kar pehle, then real money. Always diversify. Panic mat karo jab market gire — Dhurandhar mein bhi yehi sikha!\n\n(General info only)');},1200);}
+function sendChat(){const i=document.getElementById('chat-input');const m=i.value.trim();if(!m)return;i.value='';askCoach(m);}
+function addUserMsg(t){const a=document.getElementById('chat-area');const b=document.createElement('div');b.className='chat-bub user';b.innerHTML='<p>'+t+'</p>';a.insertBefore(b,document.getElementById('chat-typing'));a.scrollTop=a.scrollHeight;}
+function addCoachMsg(t){const a=document.getElementById('chat-area');const n=document.createElement('div');n.className='coach-lbl';n.textContent='Jameel Jamali';const b=document.createElement('div');b.className='chat-bub';b.innerHTML='<p>'+t.replace(/\n/g,'<br>')+'</p>';a.insertBefore(n,document.getElementById('chat-typing'));a.insertBefore(b,document.getElementById('chat-typing'));a.scrollTop=a.scrollHeight;}
+function showTyping(){document.getElementById('chat-typing').style.display='block';}
+function hideTyping(){document.getElementById('chat-typing').style.display='none';}
+
+// ── LIVE TICKER (replaced by fetchMarketPrice above) ──
+let nb=24831,sb=81445,sxb=16182;
+setInterval(()=>{sxb+=(Math.random()-.48)*85;const val=Math.round(sxb);const gain=val-10000;const pct=((gain/10000)*100).toFixed(1);const el=document.getElementById('sandbox-total');const gl=document.getElementById('sandbox-gain');if(el)el.textContent='₹'+val.toLocaleString('en-IN');if(gl)gl.textContent='+₹'+gain.toLocaleString('en-IN')+' (+'+pct+'%)';},5000);
+
+
+// ── ONBOARDING ──
+let obCurrent=0;
+const OB_DATA_KEY='finvest_user_prefs';
+
+function obStep(n){
+  obCurrent=n;
+  document.querySelectorAll('.ob-step').forEach((s,i)=>s.classList.toggle('active',i===n));
+  document.querySelectorAll('.ob-dot').forEach((d,i)=>{
+    d.classList.toggle('active',i===n);
+  });
+}
+function obNext(){obStep(obCurrent+1);}
+function obPrev(){obStep(obCurrent-1);}
+
+function obUpdateIncome(){
+  const pm=parseInt(document.getElementById('ob-pm').value)||0;
+  const st=parseInt(document.getElementById('ob-st').value)||0;
+  const sc=parseInt(document.getElementById('ob-sc').value)||0;
+  const fr=parseInt(document.getElementById('ob-fr').value)||0;
+  document.getElementById('ob-pm-val').textContent='₹'+pm.toLocaleString('en-IN');
+  document.getElementById('ob-st-val').textContent='₹'+st.toLocaleString('en-IN');
+  document.getElementById('ob-sc-val').textContent='₹'+sc.toLocaleString('en-IN');
+  document.getElementById('ob-fr-val').textContent='₹'+fr.toLocaleString('en-IN');
+  const total=pm+st+sc+fr;
+  document.getElementById('ob-total-income').textContent='₹'+total.toLocaleString('en-IN');
+  const daily=Math.round(total/30);
+  document.getElementById('ob-income-insight').textContent= total>0 ? "That's ₹"+daily.toLocaleString('en-IN')+"/day to work with 💪" : "Enter at least one income source";
+}
+
+function obSaveIncome(){
+  const pm=parseInt(document.getElementById('ob-pm').value)||0;
+  const st=parseInt(document.getElementById('ob-st').value)||0;
+  const sc=parseInt(document.getElementById('ob-sc').value)||0;
+  const fr=parseInt(document.getElementById('ob-fr').value)||0;
+  const prefs=JSON.parse(localStorage.getItem(OB_DATA_KEY)||'{}');
+  prefs.income={pm,st,sc,fr,total:pm+st+sc+fr};
+  localStorage.setItem(OB_DATA_KEY, JSON.stringify(prefs));
+  obStep(2);
+}
+
+function obSaveSemester(){
+  const start=document.getElementById('ob-sem-start').value;
+  const end=document.getElementById('ob-sem-end').value;
+  const food=parseInt(document.getElementById('ob-food').value)||0;
+  const sip=parseInt(document.getElementById('ob-sip-target').value)||0;
+  const prefs=JSON.parse(localStorage.getItem(OB_DATA_KEY)||'{}');
+  prefs.semester={start,end,food,sip};
+  localStorage.setItem(OB_DATA_KEY, JSON.stringify(prefs));
+  obStep(3);
+}
+
+function obFinish(){
+  const user=getSession();
+  const prefs=JSON.parse(localStorage.getItem(OB_DATA_KEY)||'{}');
+  prefs.onboardingDone=true;
+  localStorage.setItem(OB_DATA_KEY, JSON.stringify(prefs));
+  enterApp(user);
+}
+
+function updateHomeWithUserData(){
+  try{
+    const prefs=JSON.parse(localStorage.getItem(OB_DATA_KEY)||'{}');
+    if(prefs.income && prefs.income.total>0){
+      // Update hero card balance
+      const income=prefs.income.total;
+      document.getElementById('home-balance').textContent='₹'+income.toLocaleString('en-IN');
+    }
+    if(prefs.semester && prefs.semester.start && prefs.semester.end){
+      const start=new Date(prefs.semester.start);
+      const end=new Date(prefs.semester.end);
+      const today=new Date();
+      const total=Math.round((end-start)/(1000*60*60*24));
+      const elapsed=Math.round((today-start)/(1000*60*60*24));
+      const remaining=Math.max(0,total-elapsed);
+      const pct=Math.min(100,Math.round((elapsed/total)*100));
+      const prefs2=JSON.parse(localStorage.getItem(OB_DATA_KEY)||'{}');
+      const food=prefs2.semester&&prefs2.semester.food?prefs2.semester.food:3000;
+      const sip=prefs2.semester&&prefs2.semester.sip?prefs2.semester.sip:500;
+      const income=prefs2.income&&prefs2.income.total?prefs2.income.total:8000;
+      const daily=Math.round((income-food-sip)/30);
+      const dayEl=document.getElementById('sem-day-label');
+      const remEl=document.getElementById('sem-rem-label');
+      const barEl=document.getElementById('sem-bar');
+      const dailyEl=document.getElementById('sem-daily');
+      if(dayEl) dayEl.textContent='Day '+elapsed+' of '+total;
+      if(remEl) remEl.textContent=remaining+' days left';
+      if(barEl) barEl.style.width=pct+'%';
+      if(dailyEl) dailyEl.textContent='₹'+daily.toLocaleString('en-IN');
+    }
+  } catch(e){console.log('prefs error',e);}
+}
+
+// ── LIVE MARKET PRICES (Yahoo Finance via allorigins proxy) ──
+const MARKET_SYMBOLS=[
+  {sym:'^NSEI', label:'NIFTY 50', id:'mkt-nifty'},
+  {sym:'^BSESN', label:'SENSEX', id:'mkt-sensex'},
+  {sym:'TCS.NS', label:'TCS', id:'mkt-tcs'},
+  {sym:'HDFCBANK.NS', label:'HDFC BANK', id:'mkt-hdfc'},
+  {sym:'INFY.NS', label:'INFOSYS', id:'mkt-infy'},
+  {sym:'RELIANCE.NS', label:'RELIANCE', id:'mkt-rel'},
+];
+let marketData={};
+
+async function fetchMarketPrice(symbol){
+  try{
+    const url='https://query1.finance.yahoo.com/v8/finance/chart/'+symbol+'?interval=1d&range=1d';
+    const proxy='https://api.allorigins.win/get?url='+encodeURIComponent(url);
+    const res=await fetch(proxy, {signal:AbortSignal.timeout(6000)});
+    const json=await res.json();
+    const data=JSON.parse(json.contents);
+    const meta=data.chart.result[0].meta;
+    const price=meta.regularMarketPrice;
+    const prev=meta.previousClose||meta.chartPreviousClose;
+    const change=((price-prev)/prev*100);
+    return {price, change, up: change>=0};
+  } catch(e){ return null; }
+}
+
+function fmt(n){ return n>=1000 ? n.toLocaleString('en-IN',{maximumFractionDigits:0}) : n.toFixed(2); }
+
+async function loadAllMarketData(){
+  // Update ticker with fetched data
+  for(const s of MARKET_SYMBOLS){
+    const d=await fetchMarketPrice(s.sym);
+    if(d){
+      marketData[s.sym]=d;
+      const arrow=d.up?'▲':'▼';
+      const color=d.up?'var(--green)':'var(--red)';
+      const el=document.getElementById(s.id);
+      if(el){
+        el.innerHTML=s.label+' <span style="font-family:Syne,sans-serif;font-weight:600;color:'+color+'">'+fmt(d.price)+' '+arrow+Math.abs(d.change).toFixed(1)+'%</span>';
+      }
+    }
+  }
+  // Update sandbox holdings with live data
+  updateSandboxWithLivePrices();
+}
+
+function updateSandboxWithLivePrices(){
+  const nifty=marketData['^NSEI'];
+  const tcs=marketData['TCS.NS'];
+  const hdfc=marketData['HDFCBANK.NS'];
+
+  if(nifty){
+    const el=document.getElementById('live-nifty-ret');
+    if(el){ el.textContent=(nifty.change>=0?'+':'')+nifty.change.toFixed(1)+'%'; el.style.color=nifty.change>=0?'var(--green)':'var(--red)'; }
+    const el2=document.getElementById('sb-nifty-label');
+    if(el2) el2.textContent='NIFTY 50 · Live: ₹'+fmt(nifty.price);
+  }
+  if(tcs){
+    const el=document.getElementById('live-tcs-ret');
+    if(el){ el.textContent=(tcs.change>=0?'+':'')+tcs.change.toFixed(1)+'%'; el.style.color=tcs.change>=0?'var(--green)':'var(--red)'; }
+    const el2=document.getElementById('sb-tcs-label');
+    if(el2) el2.textContent='TCS · Live: ₹'+fmt(tcs.price);
+  }
+}
+
+// Fetch on load, then refresh every 5 minutes
+
+// Fetch live market data on load, refresh every 5 mins
+window.addEventListener('load', ()=>{
+  setTimeout(loadAllMarketData, 800);
+  setInterval(loadAllMarketData, 300000);
+});
+
+// ── SMART INIT ──
+// Logic:
+// 1. No session → show landing page (always, even if previously logged in on another tab)
+// 2. Has session + never completed onboarding → show onboarding
+// 3. Has session + completed onboarding → go straight to app
+(function init(){
+  const session = getSession();
+  if(!session || !session.id){
+    // No session — show landing page
+    showLayer('layer-landing');
+    return;
+  }
+  if(session.status === 'guest'){
+    enterApp(session);
+    return;
+  }
+  // Check if user has completed onboarding
+  const prefs = JSON.parse(localStorage.getItem(OB_DATA_KEY) || '{}');
+  const completedOnboarding = prefs && prefs.onboardingDone === true;
+  if(!completedOnboarding){
+    // Has account but never finished onboarding → show it
+    document.getElementById('ob-welcome-name').textContent =
+      'Welcome back, ' + session.name.split(' ')[0] + '! Let\'s finish setting up your account.';
+    showLayer('layer-onboarding');
+    obStep(0);
+  } else {
+    enterApp(session);
+  }
+})();
+
+</script>
+</body>
+</html>
